@@ -3,7 +3,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler
 
 logging.basicConfig(level=logging.INFO)
 
-TOKEN = 'YOUR_TELEGRAM_BOT_TOKEN'
+TOKEN = '7744724902:AAHZ4xsKvqBqtCoh5tJpE5W-oezL4aXoxp8'
 
 def start(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text='Hello! I can delete all media and stickers in this group.')
