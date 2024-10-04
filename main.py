@@ -1,5 +1,5 @@
 import logging
-from telegram import Update
+from telegram import Update, Bot
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 logging.basicConfig(level=logging.INFO)
@@ -11,17 +11,18 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def delete_media(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
+    bot = Bot(token=TOKEN)
     offset = 0
     while True:
         try:
-            updates = await context.bot.get_updates(offset=offset)
-            if not updates:
+            messages = bot.get_history(chat_id=chat_id, offset=offset)
+            if not messages:
                 break
-            for update in updates:
-                if update.message and (update.message.sticker or update.message.photo or update.message.video or update.message.document):
-                    print(f"Trying to delete message ID {update.message.message_id}")
-                    await context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
-            offset += len(updates)
+            for message in messages:
+                if message.sticker or message.photo or message.video or message.document:
+                    print(f"Trying to delete message ID {message.message_id}")
+                    await context.bot.delete_message(chat_id=chat_id, message_id=message.message_id)
+            offset += len(messages)
         except Exception as e:
             print(f"Error: {e}")
 
