@@ -1,7 +1,11 @@
-from telegram.ext import Updater, CommandHandler, MessageHandler
-from telegram.ext.filters import Filters
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
+from telegram.ext import Updater, CommandHandler, MessageHandler
+from telegram.ext.messagefilter import MessageFilter
+
+class PhotoFilter(MessageFilter):
+    def filter(self, message):
+        return message.photo
 
 logging.basicConfig(level=logging.INFO)
 
