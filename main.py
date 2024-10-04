@@ -1,28 +1,26 @@
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
-from telegram.ext import Updater, CommandHandler, MessageHandler
-from telegram.ext.messagefilter import MessageFilter
-
-class PhotoFilter(MessageFilter):
-    def filter(self, message):
-        return message.photo
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 logging.basicConfig(level=logging.INFO)
 
-TOKEN = '7744724902:AAHZ4xsKvqBqtCoh5tJpE5W-oezL4aXoxp8'
+TOKEN = ' YOUR_TELEGRAM_BOT_TOKEN'
 
-def delete_media_and_stickers(update, context):
+def start(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text='Hello! I can delete all media and stickers in this group.')
+
+def delete_media(update, context):
     chat_id = update.effective_chat.id
-    for message in context.bot.get_chat_history(chat_id):
-        if message.photo or message.video or message.audio or message.document or message.sticker:
-            context.bot.delete_message(chat_id, message.message_id)
+    for message in context.bot.get_history(chat_id=chat_id):
+        if message.sticker or message.photo or message.video or message.document:
+            context.bot.delete_message(chat_id=chat_id, message_id=message.message_id)
 
 def main():
     updater = Updater(TOKEN, use_context=True)
 
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler('delete_media_and_stickers', delete_media_and_stickers))
+    dp.add_handler(CommandHandler('start', start))
+    dp.add_handler(CommandHandler('delete_media', delete_media))
 
     updater.start_polling()
     updater.idle()
